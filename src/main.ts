@@ -13,12 +13,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <h1>SQL Server Transaction Isolation Levels</h1>
   <p>Control how one transaction is affected by others executing concurrently, balancing performance and data consistency.</p>
 
-  <h2>Read Phenomena</h2>
-  <ul style="text-align: left; list-style-type: none; margin: 0; padding: 0;">
-    <li><span class="bold underline">Dirty Read</span>: Reading uncommitted changes from other transactions that could be rolled back later.</li>
-    <li><span class="bold underline">Non-Repeatable Read</span>: Getting different values when re-reading the same row due to updates by other transactions.</li>
-    <li><span class="bold underline">Phantom Read</span>: Seeing new or missing rows when re-reading a range due to inserts/deletes by other transactions.</li>
-  </ul>
+  <article>
+    <h2>Read Phenomena</h2>
+    <ul style="text-align: left; list-style-type: none; margin: 0; padding: 0;">
+      <li><span class="bold underline">Dirty Read</span>: Reading uncommitted changes from other transactions that could be rolled back later.</li>
+      <li><span class="bold underline">Non-Repeatable Read</span>: Getting different values when re-reading the same row due to updates by other transactions.</li>
+      <li><span class="bold underline">Phantom Read</span>: Seeing new or missing rows when re-reading a range due to inserts/deletes by other transactions.</li>
+    </ul>
+  </article>
 
   <table>
     <thead>
@@ -28,7 +30,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <th>Dirty Reads</th>
         <th>Non-Repeatable Reads</th>
         <th>Phantom Reads</th>
-        <th>Concurrency Impact/Perf</th>
+        <th>Performance</th>
     </thead>
 
     <tbody>
@@ -62,7 +64,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
         <td><span class="good-color">No</span></td>
         <td><span class="good-color">No</span></td>
         <td><span class="good-color">No</span></td>
-        <td><span class="color-rating-4-of-5">Fast (but requires extra storage for snapshots of data)</span></td>
+        <td><span class="color-rating-4-of-5">Fast (requires extra storage for data snapshots)</span></td>
       </tr>
       <tr>
         <td>SERIALIZABLE</td>
@@ -75,5 +77,5 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </tbody>
   </table>
 
-  <p class="logo-with-name"><img src="${logo}" alt="ThoughtViz" /> ThoughtViz</p>
+  <p class="logo-with-name"><img src="${logo}" alt="ThoughtViz" /> ThoughtViz.com</p>
 `;
