@@ -77,5 +77,5 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </tbody>
   </table>
 
-  <p class="logo-with-name"><img src="${logo}" alt="ThoughtViz" /> ThoughtViz.com</p>
+  <p class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</p>
 `;
