@@ -1,5 +1,11 @@
 import './style.css';
 
+// think about all the ways to display this table-like data
+// start making it look nice
+// make it linkable
+// make it shareable
+// publish to social media
+
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <h1>SQL Server Transaction Isolation Levels</h1>
   <ul>
