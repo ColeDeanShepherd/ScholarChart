@@ -1,5 +1,9 @@
 /* :root {} */
 
+nav .logo-with-name a {
+  padding: 0;
+}
+
 h2 {
   --pico-typography-spacing-top: 2rem !important;
 }
@@ -14,6 +18,10 @@ table td {
   text-align: center;
 }
 
+#app {
+  padding-top: 0;
+}
+
 .logo-with-name {
   display: flex;
   align-items: center;
@@ -24,6 +32,10 @@ table td {
 .logo-with-name img {
   height: 2.5rem;
   margin-right: 0.3rem;
+}
+
+.logo-with-name a:hover {
+  text-decoration: none;
 }
 
 .color-rating-1-of-5 {

@@ -1,7 +1,7 @@
 import '@picocss/pico/css/pico.min.css';
 import './style.css';
 
-import logo from '../public/logo.svg';
+import logo from './logo.svg';
 
 // think about all the ways to display this table-like data
 // start making it look nice

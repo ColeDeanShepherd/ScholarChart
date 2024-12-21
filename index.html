@@ -2,33 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Learn with interactive, animated visualizations!" />
     
     <title>ThoughtViz</title>
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <meta name="color-scheme" content="light dark">
-    <meta name="description" content="Learn with interactive, animated visualizations!" />
   </head>
+
   <body>
     <header>
-      <nav>
-        <ul>
-          <li>
-            <strong>Acme Corp</strong>
-            <p class="logo-with-name"><img src="${logo}" alt="ThoughtViz" /> ThoughtViz.com</p>
-          </li>
-        </ul>
-        <ul>
-          <li><a href="#" class="contrast">About</a></li>
-          <li><a href="#" class="contrast">Services</a></li>
-          <li><a href="#" class="contrast">Products</a></li>
-        </ul>
-      </nav>
+      <div class="container">
+        <nav>
+          <ul>
+            <li>
+              <div class="logo-with-name">
+                <a href="/" class="contrast"><img src="/logo.svg" alt="ThoughtViz" /> ThoughtViz.com</a>
+              </div>
+            </li>
+          </ul>
+          <ul>
+            <!-- <li><a href="#" class="contrast">About</a></li>
+            <li><a href="#" class="contrast">Services</a></li>
+            <li><a href="#" class="contrast">Products</a></li> -->
+          </ul>
+        </nav>
+      </div>
     </header>
     <main id="app" class="container"></main>
-    <script type="module" src="/src/main.ts"></script>
     <footer></footer>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
