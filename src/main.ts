@@ -1,6 +1,8 @@
 import '@picocss/pico/css/pico.min.css';
 import './style.css';
 
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 import logo from './logo.svg';
 
 // think about all the ways to display this table-like data

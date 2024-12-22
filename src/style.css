@@ -83,9 +83,15 @@ table td {
   margin-top: 3rem;
 }
 
+.social-links {
+  margin: 0;
+  padding: 0;
+}
+
 .social-links li {
   list-style-type: none;
   display: inline;
+  padding-right: 0.5rem;
 }
 
 /* :root {
