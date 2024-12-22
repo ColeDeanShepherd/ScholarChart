@@ -12,7 +12,10 @@ import logo from './logo.svg';
 // make it shareable
 // publish to social media
 
-//document.querySelector<HTMLDivElement>('#route-container')
+// TODO: write skew?
+// TODO: read committed snapshot?
+// phantom read in snapshot?
+// read committed snapshot
 
 interface IRoute {
   pathname: string;
@@ -58,9 +61,9 @@ const routes: IRoute[] = [
             <tr>
               <th>Isolation Level</th>
               <th>Behavior</th>
-              <th>Dirty Reads</th>
-              <th>Non-Repeatable Reads</th>
-              <th>Phantom Reads</th>
+              <th>Prevents Dirty Reads?</th>
+              <th>Prevents Non-Repeatable Reads?</th>
+              <th>Prevents Phantom Reads?</th>
               <th>Performance</th>
           </thead>
 
@@ -68,41 +71,41 @@ const routes: IRoute[] = [
             <tr>
               <td>READ UNCOMMITTED</td>
               <td class="left-align">Allows dirty reads. No locks are placed, so data might change or roll back later.</td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td>🔥🔥🔥🔥</td>
             </tr>
             <tr>
               <td>READ COMMITTED</td>
               <td class="left-align">Reads only committed data. Shared locks prevent reading uncommitted changes. This is the default isolation level.</td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
             </tr>
             <tr>
               <td>REPEATABLE READ</td>
               <td class="left-align">Ensures that if data is read multiple times within a transaction, it will remain unchanged. Prevents non-repeatable reads by holding locks on read data until the transaction ends.</td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
             </tr>
             <tr>
               <td>SNAPSHOT</td>
               <td class="left-align">Uses versioning to provide a consistent view of data from the transaction's start. No locks.</td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td>🔥🔥🔥<span class="inactive-emoji">🔥</span><br /><br />👎 Increased TempDB usage</td>
             </tr>
             <tr>
               <td>SERIALIZABLE</td>
-              <td class="left-align">Only allows one transaction to access data at a time with exclusive locks, preventing dirty reads, non-repeatable reads, and phantom reads.</td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td><span class="good-color"><i data-feather="slash"></i></span></td>
+              <td class="left-align">Functions as if only one transaction can access data at a time.</td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
             </tr>
           </tbody>
