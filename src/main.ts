@@ -2,6 +2,7 @@ import '@picocss/pico/css/pico.min.css';
 import './style.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import feather from 'feather-icons';
 
 import logo from './logo.svg';
 
@@ -67,41 +68,41 @@ const routes: IRoute[] = [
             <tr>
               <td>READ UNCOMMITTED</td>
               <td class="left-align">Allows dirty reads. No locks are placed, so data might change or roll back later.</td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
               <td>🔥🔥🔥🔥</td>
             </tr>
             <tr>
               <td>READ COMMITTED</td>
               <td class="left-align">Reads only committed data. Shared locks prevent reading uncommitted changes. This is the default isolation level.</td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
               <td>🔥🔥🔥</td>
             </tr>
             <tr>
               <td>REPEATABLE READ</td>
               <td class="left-align">Ensures that if data is read multiple times within a transaction, it will remain unchanged. Prevents non-repeatable reads by holding locks on read data until the transaction ends.</td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="bad-color"><i class="bi bi-check"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="check"></i></span></td>
               <td>🔥🔥</td>
             </tr>
             <tr>
               <td>SNAPSHOT</td>
               <td class="left-align">Uses versioning to provide a consistent view of data from the transaction's start. No locks.</td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
               <td>🔥🔥🔥<br />👍 Minimal locking<br />👎 Increased TempDB usage</td>
             </tr>
             <tr>
               <td>SERIALIZABLE</td>
               <td class="left-align">Only allows one transaction to access data at a time with exclusive locks, preventing dirty reads, non-repeatable reads, and phantom reads.</td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
-              <td><span class="good-color"><i class="bi bi-x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
+              <td><span class="good-color"><i data-feather="x"></i></span></td>
               <td>🔥</td>
             </tr>
           </tbody>
@@ -140,6 +141,10 @@ function renderRoute(route: IRoute) {
 function run() {
   const curRoute = getCurRoute();
   renderRoute(curRoute);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    feather.replace();
+  });
 }
 
 run();
