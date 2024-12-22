@@ -46,7 +46,7 @@ const routes: IRoute[] = [
       routeContainerElem.innerHTML = `
         <div class="sql-server-transaction-isolation-levels">
           <h1>SQL Server Transaction Isolation Levels</h1>
-          <p>Control how one transaction is affected by others executing concurrently, balancing performance and data consistency.</p>
+          <p>Control how one transaction is affected by others executing concurrently, balancing concurrency/performance and data consistency.</p>
 
           <article>
             <h2>Read Phenomena</h2>
@@ -65,7 +65,7 @@ const routes: IRoute[] = [
                 <th>Prevents Dirty Reads?</th>
                 <th>Prevents Non-Repeatable Reads?</th>
                 <th>Prevents Phantom Reads?</th>
-                <th>Performance</th>
+                <th>Concurrency/Performance</th>
             </thead>
 
             <tbody>
@@ -138,6 +138,8 @@ const routes: IRoute[] = [
           </table>
 
           <p class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</p>
+          
+          <p>Source: <a href="https://docs.microsoft.com/en-us/sql/t-sql/statements/set-transaction" target="_blank">Microsoft Docs</a></p>
         </div>
       `;
     }
