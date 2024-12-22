@@ -45,7 +45,7 @@ const routes: IRoute[] = [
     renderFn: routeContainerElem => {
       routeContainerElem.innerHTML = `
         <div class="sql-server-transaction-isolation-levels">
-          <h1>SQL Server Transaction Isolation Levels</h1>
+          <h1>Azure SQL/SQL Server Transaction Isolation Levels</h1>
           <p>Control how one transaction is affected by others executing concurrently, balancing concurrency/performance and data consistency.</p>
 
           <article>
@@ -65,7 +65,7 @@ const routes: IRoute[] = [
                 <th>Prevents Non-Repeatable Reads?</th>
                 <th>Prevents Phantom Reads?</th>
                 <th>Concurrency &amp; Performance</th>
-                <th>Remarks</th>
+                <th>Use-Cases &amp; Remarks</th>
             </thead>
 
             <tbody>
@@ -75,7 +75,11 @@ const routes: IRoute[] = [
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td>🔥🔥🔥🔥</td>
-                <td class="left-align"></td>
+                <td class="left-align">
+                  <ul>
+                    <li>Example Use: Generating approximate reports in real-time dashboards.</li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                 <td>READ COMMITTED</td>
@@ -85,9 +89,23 @@ const routes: IRoute[] = [
                 <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
                 <td class="left-align">
                   <ul>
-                    <li>The default isolation level.</li>
-                    <li>(READ_COMMITTED_SNAPSHOT = OFF): Uses locks to prevent dirty reads.</li>
-                    <li>(READ_COMMITTED_SNAPSHOT = ON): Uses row versioning to prevent dirty reads. 👎 Increases TempDB usage.</li>
+                    <li>
+                      READ_COMMITTED_SNAPSHOT = ON
+                      <ul>
+                        <li>The default isolation level in Azure SQL.</li>
+                        <li>Uses row versioning to prevent dirty reads without blocking.</li>
+                        <li>Increases I/O &amp; TempDB usage.</li>
+                        <li>Example Use: Typical OLTP workloads.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      READ_COMMITTED_SNAPSHOT = OFF
+                      <ul>
+                        <li>The default isolation level in SQL Server.</li>
+                        <li>Uses locks to prevent dirty reads.</li>
+                        <li>Example Use: OLTP workloads where increased blocking is OK.</li>
+                      </ul>
+                    </li>
                   </ul>
                 </td>
               </tr>
@@ -97,7 +115,11 @@ const routes: IRoute[] = [
                 <td><span class="good-color"><i data-feather="check"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
-                <td class="left-align"></td>
+                <td class="left-align">
+                  <ul>
+                    <li>Example Use: Financial applications calculating intermediate results based on multiple reads.</li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                 <td>SNAPSHOT</td>
@@ -107,6 +129,13 @@ const routes: IRoute[] = [
                 <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
                 <td class="left-align">
                   <ul>
+                    <li>
+                      Example Uses:
+                      <ul>
+                        <li>Reporting and analytics workloads requiring a consistent snapshot of data.</li>
+                        <li>Ensuring application sees stable/coherent snapshots when querying change-tracked data.</li>
+                      </ul>
+                    </li>
                     <li>Uses versioning to provide a consistent view of data from the transaction's start.</li>
                     <li>Minimal locking.</li>
                     <li>👎 Increases TempDB usage.</li>
@@ -121,6 +150,7 @@ const routes: IRoute[] = [
                 <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
                 <td class="left-align">
                   <ul>
+                    <li>Example Use: Financial applications where transactions involve critical integrity constraints.</li>
                     <li>Behaves like only one transaction can access data at a time.</li>
                   </ul>
                 </td>
