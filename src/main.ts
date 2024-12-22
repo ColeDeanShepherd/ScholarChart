@@ -79,7 +79,7 @@ const routes: IRoute[] = [
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="bad-color"><i data-feather="check"></i></span></td>
               <td><span class="bad-color"><i data-feather="check"></i></span></td>
-              <td>🔥🔥🔥</td>
+              <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
             </tr>
             <tr>
               <td>REPEATABLE READ</td>
@@ -87,7 +87,7 @@ const routes: IRoute[] = [
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="bad-color"><i data-feather="check"></i></span></td>
-              <td>🔥🔥</td>
+              <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
             </tr>
             <tr>
               <td>SNAPSHOT</td>
@@ -95,7 +95,7 @@ const routes: IRoute[] = [
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td>🔥🔥🔥<br />👎 Increased TempDB usage</td>
+              <td>🔥🔥🔥<span class="inactive-emoji">🔥</span><br /><br />👎 Increased TempDB usage</td>
             </tr>
             <tr>
               <td>SERIALIZABLE</td>
@@ -103,7 +103,7 @@ const routes: IRoute[] = [
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
               <td><span class="good-color"><i data-feather="slash"></i></span></td>
-              <td>🔥</td>
+              <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
             </tr>
           </tbody>
         </table>
