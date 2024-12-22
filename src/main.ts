@@ -138,7 +138,7 @@ const routes: IRoute[] = [
                     </li>
                     <li>Uses versioning to provide a consistent view of data from the transaction's start.</li>
                     <li>Minimal locking.</li>
-                    <li>👎 Increases TempDB usage.</li>
+                    <li>Increases I/O &amp; TempDB usage.</li>
                   </ul>
                 </td>
               </tr>
