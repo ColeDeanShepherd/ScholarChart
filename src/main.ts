@@ -65,7 +65,7 @@ const routes: IRoute[] = [
                 <th>Prevents Dirty Reads?</th>
                 <th>Prevents Non-Repeatable Reads?</th>
                 <th>Prevents Phantom Reads?</th>
-                <th>Concurrency/Performance</th>
+                <th>Concurrency &amp; Performance</th>
             </thead>
 
             <tbody>
