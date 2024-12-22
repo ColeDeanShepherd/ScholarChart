@@ -61,79 +61,69 @@ const routes: IRoute[] = [
             <thead>
               <tr>
                 <th>Isolation Level</th>
-                <th>Behavior</th>
                 <th>Prevents Dirty Reads?</th>
                 <th>Prevents Non-Repeatable Reads?</th>
                 <th>Prevents Phantom Reads?</th>
                 <th>Concurrency &amp; Performance</th>
+                <th>Remarks</th>
             </thead>
 
             <tbody>
               <tr>
                 <td>READ UNCOMMITTED</td>
-                <td class="left-align">
-                  <ul>
-                    <li>Allows dirty reads.</li>
-                    <li>No locks are placed, so data might change or roll back later.</li>
-                  </ul>
-                </td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td>🔥🔥🔥🔥</td>
+                <td class="left-align"></td>
               </tr>
               <tr>
                 <td>READ COMMITTED</td>
-                <td class="left-align">
-                  <ul>
-                    <li>The default isolation level.</li>
-                    <li>Reads only committed data.</li>
-                    <li>(READ_COMMITTED_SNAPSHOT = OFF): Shared locks prevent reading uncommitted changes.</li>
-                    <li>(READ_COMMITTED_SNAPSHOT = ON): Row versioning prevents reading uncommitted changes. Minimal locking, but increased TempDB usage.</li>
-                  </ul>
-                </td>
                 <td><span class="good-color"><i data-feather="check"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
+                <td class="left-align">
+                  <ul>
+                    <li>The default isolation level.</li>
+                    <li>(READ_COMMITTED_SNAPSHOT = OFF): Uses locks to prevent dirty reads.</li>
+                    <li>(READ_COMMITTED_SNAPSHOT = ON): Uses row versioning to prevent dirty reads. 👎 Increases TempDB usage.</li>
+                  </ul>
+                </td>
               </tr>
               <tr>
                 <td>REPEATABLE READ</td>
-                <td class="left-align">
-                  <ul>
-                    <li>Ensures that if data is read multiple times within a transaction, it will remain unchanged.</li>
-                    <li>Prevents non-repeatable reads by holding locks on read data until the transaction ends.</li>
-                  </ul>
-                </td>
                 <td><span class="good-color"><i data-feather="check"></i></span></td>
                 <td><span class="good-color"><i data-feather="check"></i></span></td>
                 <td><span class="bad-color"><i data-feather="x"></i></span></td>
                 <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
+                <td class="left-align"></td>
               </tr>
               <tr>
                 <td>SNAPSHOT</td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
                 <td class="left-align">
                   <ul>
                     <li>Uses versioning to provide a consistent view of data from the transaction's start.</li>
                     <li>Minimal locking.</li>
+                    <li>👎 Increases TempDB usage.</li>
                   </ul>
                 </td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td>🔥🔥🔥<span class="inactive-emoji">🔥</span><br /><br />👎 Increased TempDB usage</td>
               </tr>
               <tr>
                 <td>SERIALIZABLE</td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td><span class="good-color"><i data-feather="check"></i></span></td>
+                <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
                 <td class="left-align">
                   <ul>
                     <li>Behaves like only one transaction can access data at a time.</li>
                   </ul>
                 </td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td><span class="good-color"><i data-feather="check"></i></span></td>
-                <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
               </tr>
             </tbody>
           </table>
