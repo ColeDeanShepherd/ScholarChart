@@ -94,6 +94,11 @@ table td {
   padding-right: 0.5rem;
 }
 
+.bi {
+  width: 1em;
+  font-size: var(--pico-font-size);
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
