@@ -32,7 +32,7 @@ const routes: IRoute[] = [
         <section class="hero">
           <h1>Learn with interactive, animated visualizations!</h1>
           <p>StudyChart is still a work-in-progress so content is sparse, but you can check out the following content now:</p>
-          <ul>
+          <ul class="lsp-inside">
             <li><a href="/sql-server-transaction-isolation-levels">SQL Server Transaction Isolation Levels</a></li>
           </ul>
         </section>
@@ -86,9 +86,10 @@ const routes: IRoute[] = [
                 <td>READ COMMITTED</td>
                 <td class="left-align">
                   <ul>
+                    <li>The default isolation level.</li>
                     <li>Reads only committed data.</li>
-                    <li>Shared locks prevent reading uncommitted changes.</li>
-                    <li>This is the default isolation level.</li>
+                    <li>(READ_COMMITTED_SNAPSHOT = OFF): Shared locks prevent reading uncommitted changes.</li>
+                    <li>(READ_COMMITTED_SNAPSHOT = ON): Row versioning prevents reading uncommitted changes. Minimal locking, but increased TempDB usage.</li>
                   </ul>
                 </td>
                 <td><span class="good-color"><i data-feather="check"></i></span></td>
@@ -139,7 +140,7 @@ const routes: IRoute[] = [
 
           <p class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</p>
           
-          <p>Source: <a href="https://docs.microsoft.com/en-us/sql/t-sql/statements/set-transaction" target="_blank">Microsoft Docs</a></p>
+          <p>Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
         </div>
       `;
     }

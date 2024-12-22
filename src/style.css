@@ -9,7 +9,15 @@ h2 {
   --pico-typography-spacing-top: 2rem !important;
 }
 
-ul {
+ul.lsp-inside li {
+  list-style-position: inside;;
+}
+
+ul:last-child {
+  margin-bottom: 0;
+}
+
+p:last-child {
   margin-bottom: 0;
 }
 
