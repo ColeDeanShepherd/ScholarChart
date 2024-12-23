@@ -7,6 +7,7 @@ import feather from 'feather-icons';
 import logo from './logo.svg';
 import { isDevEnv } from './config';
 import { initAnalytics, trackPageView } from './analytics';
+import { animate, IKeyframe } from './animation';
 
 // make it shareable
 // publish to social media
@@ -171,72 +172,23 @@ if (isDevEnv()) {
       routeContainerElem.appendChild(text);
 
       // Change the text's margin-left from 100px to 200px over 2 seconds. Use requestAnimationFrame, and the timestamp passed into it. Make it framerate-independent.
-      function linearInterpolate(start: number, end: number, t: number) {
-        return start + (t * (end - start));
-      }
-
-      const keyframes = [
+      const keyframes: IKeyframe[] = [
         {
           time: 0.0,
           value: 10
         },
         {
           time: 2.0,
-          value: 200
+          value: 400
         }
       ];
-
-      function getPrevKeyframeIndex(elapsedSec: number) {
-        // TODO: Use binary search.
-        for (let i = (keyframes.length - 1); i >= 0; i--) {
-          if (keyframes[i].time <= elapsedSec) {
-            return i;
-          }
-        }
-
-        return undefined;
-      }
 
       const updateControlledValue: (newValue: number) => void =
         newValue => {
           text.style.marginLeft = `${newValue}px`;
         };
-
-      let startTimestampMs: number | undefined = undefined;
-
-      function animate(timestampMs: number) {
-        if (startTimestampMs === undefined) {
-          startTimestampMs = timestampMs;
-        }
-
-        const elapsedMs = timestampMs - startTimestampMs;
-        const elapsedSec = elapsedMs / 1000;
-        
-        const prevKeyframeIndex = getPrevKeyframeIndex(elapsedSec);
-        if (prevKeyframeIndex === undefined) {
-          requestAnimationFrame(animate);
-          return;
-        }
-        
-        const prevKeyframe = keyframes[prevKeyframeIndex];
-
-        const nextKeyframeIndex = prevKeyframeIndex + 1;
-        if (nextKeyframeIndex >= keyframes.length) {
-          updateControlledValue(prevKeyframe.value);
-          return;
-        }
-
-        const nextKeyframe = keyframes[nextKeyframeIndex];
-
-        const progressPct = (elapsedSec - prevKeyframe.time) / (nextKeyframe.time - prevKeyframe.time);
-        const newValue = linearInterpolate(prevKeyframe.value, nextKeyframe.value, progressPct);
-
-        updateControlledValue(newValue);
-
-        requestAnimationFrame(animate);
-      }
-
-      requestAnimationFrame(animate);
+      
+      animate(keyframes, true, updateControlledValue);
     }
   });
 }
