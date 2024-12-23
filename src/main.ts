@@ -33,6 +33,9 @@ const routes: IRoute[] = [
           <ul class="lsp-inside">
             <li><a href="/sql-server-transaction-isolation-levels">SQL Server Transaction Isolation Levels</a></li>
           </ul>
+          <br />
+          <h3>Subscribe our newsletter to be notified of new content!</h3>
+          <iframe src="https://scholarchart.substack.com/embed" width="480" height="320" style="border:1px solid #EEE; background:white;" frameborder="0" scrolling="no"></iframe>
         </section>
       `;
     }
