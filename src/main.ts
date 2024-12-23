@@ -46,7 +46,7 @@ const routes: IRoute[] = [
           <p>Control how one transaction is affected by others executing concurrently, balancing concurrency/performance and data consistency.</p>
 
           <article>
-            <h2>Read Phenomena</h2>
+            <h3><u>Read Phenomena</u>: Artifacts in read data due to isolation level</h3>
             <ul>
               <li><span class="bold underline">Dirty Read</span>: Reading uncommitted changes from other transactions that could be rolled back later.</li>
               <li><span class="bold underline">Non-Repeatable Read</span>: Getting different values when re-reading the same row due to updates by other transactions.</li>
