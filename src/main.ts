@@ -89,18 +89,18 @@ const routes: IRoute[] = [
                     <li>
                       READ_COMMITTED_SNAPSHOT = ON
                       <ul>
+                        <li>Example Use: Typical OLTP workloads.</li>
                         <li>The default isolation level in Azure SQL.</li>
                         <li>Uses row versioning to prevent dirty reads without blocking.</li>
                         <li>Increases I/O &amp; TempDB usage.</li>
-                        <li>Example Use: Typical OLTP workloads.</li>
                       </ul>
                     </li>
                     <li>
                       READ_COMMITTED_SNAPSHOT = OFF
                       <ul>
+                        <li>Example Use: OLTP workloads where increased blocking is OK.</li>
                         <li>The default isolation level in SQL Server.</li>
                         <li>Uses locks to prevent dirty reads.</li>
-                        <li>Example Use: OLTP workloads where increased blocking is OK.</li>
                       </ul>
                     </li>
                   </ul>
@@ -154,7 +154,10 @@ const routes: IRoute[] = [
             </tbody>
           </table>
 
-          <p class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div>
+            <div>V1 (Dec. 23, 2024)</div>
+          </div>
           
           <p>Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
         </div>
