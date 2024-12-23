@@ -28,7 +28,7 @@ const routes: IRoute[] = [
     renderFn: routeContainerElem => {
       routeContainerElem.innerHTML = `
         <section class="hero">
-          <h1>Learn with interactive, animated visualizations!</h1>
+          <h1>Learn with bite-sized, beautiful visualizations!</h1>
           <p>StudyChart is still a work-in-progress so content is sparse, but you can check out the following content now:</p>
           <ul class="lsp-inside">
             <li><a href="/sql-server-transaction-isolation-levels">SQL Server Transaction Isolation Levels</a></li>

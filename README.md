@@ -1,6 +1,6 @@
 # ScholarChart
 
-Learn with interactive, animated visualizations!
+Learn with bite-sized, beautiful visualizations!
 
 ## To-Do
 
