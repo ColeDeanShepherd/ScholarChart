@@ -167,25 +167,87 @@ if (isDevEnv()) {
     pathname: '/dev',
     title: 'Dev',
     renderFn: routeContainerElem => {
-      const text = document.createElement('p');
-      text.textContent = 'This is a dev route!';
-      routeContainerElem.appendChild(text);
+      const gridDiv = document.createElement('div');
+      gridDiv.classList.add('grid');
+      gridDiv.style.position = 'relative';
+
+      const txn1Container = document.createElement('article');
+      txn1Container.innerHTML = `
+        <header>Transaction 1</header>
+        <p>...</p>
+        <p>SELECT Value FROM Table WHERE Id = 2</p>
+        <p>...</p>
+        <p>COMMIT TRANSACTION</p>`;
+      
+      gridDiv.appendChild(txn1Container);
+      
+      const txn2Container = document.createElement('article');
+      txn2Container.innerHTML = `
+        <header>Transaction 2</header>
+        <p>UPDATE Table SET Value = 250 WHERE Id = 2</p>
+        <p>...</p>
+        <p>ROLLBACK TRANSACTION</p>`;
+      
+      gridDiv.appendChild(txn2Container);
+
+      const overlayDiv = document.createElement('div');
+      overlayDiv.innerHTML = `asdf`;
+      overlayDiv.style.position = 'absolute';
+      overlayDiv.style.top = '0';
+      overlayDiv.style.left = '0';
+      overlayDiv.style.width = '100%';
+      // set height equal to height of paragraph in one of the transactions
+      //overlayDiv.style.height = '100px';
+      overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+
+      gridDiv.appendChild(overlayDiv);
+
+      routeContainerElem.appendChild(gridDiv);
+      
+      overlayDiv.style.height = txn1Container.getElementsByTagName('p')[0].clientHeight + 'px';
+
+      const tableContainer = document.createElement('div');
+      tableContainer.innerHTML = `
+        <h2>Table</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>200</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>300</td>
+            </tr>
+        </table>`;
+      routeContainerElem.appendChild(tableContainer);
 
       // Change the text's margin-left from 100px to 200px over 2 seconds. Use requestAnimationFrame, and the timestamp passed into it. Make it framerate-independent.
       const keyframes: IKeyframe[] = [
         {
           time: 0.0,
-          value: 10
+          value: txn1Container.getElementsByTagName('p')[0].getBoundingClientRect().top
         },
         {
           time: 2.0,
-          value: 400
+          value: txn1Container.getElementsByTagName('p')[1].getBoundingClientRect().top
         }
       ];
 
       const updateControlledValue: (newValue: number) => void =
         newValue => {
-          text.style.marginLeft = `${newValue}px`;
+          overlayDiv.style.top = `${newValue}px`;
         };
       
       animate(keyframes, true, updateControlledValue);
