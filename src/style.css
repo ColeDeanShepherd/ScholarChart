@@ -31,7 +31,6 @@ table td {
 }
 
 #route-container {
-  padding-top: 0;
 }
 
 .logo-with-name {
@@ -113,4 +112,21 @@ table td {
 
 .inactive-emoji {
   opacity: 0.1;
+}
+
+.no-padding-top {
+  padding-top: 0;
+}
+
+.hide {
+  display: none;
+}
+
+.hide-in-screenshot {
+}
+
+.screenshot th,
+.screenshot td {
+  /* padding: calc(var(--pico-spacing) / 2) calc(var(--pico-spacing) / 2); */
+  padding: calc(var(--pico-spacing) / 2) 0;
 }

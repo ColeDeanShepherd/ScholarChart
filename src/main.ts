@@ -9,6 +9,7 @@ import { isDevEnv } from './config';
 import { initAnalytics, trackPageView } from './analytics';
 import { runAnimation, IKeyframe, KeyframeBuilder, IKeyframeAnimation } from './animation';
 import { getElementYRelativeToContainer } from './ui-lib';
+import { getCurQueryParams } from './web-lib';
 
 // make it shareable
 // publish to social media
@@ -154,14 +155,29 @@ const routes: IRoute[] = [
             </tbody>
           </table>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
             <div class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div>
-            <div>V1 (Dec. 23, 2024)</div>
+            <div>v1 (Dec. 23, 2024)</div>
           </div>
           
-          <p>Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
+          <p class="sources hide-in-screenshot" style="margin-top: 2rem;">Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
         </div>
       `;
+
+      const queryParams = getCurQueryParams();
+      const isScreenshotMode = queryParams.screenshot === 'true';
+
+      if (isScreenshotMode) {
+        document.body.classList.add('screenshot');
+
+        document.body.getElementsByTagName('header')[0].style.display = 'none';
+        document.body.getElementsByTagName('footer')[0].style.display = 'none';
+
+        routeContainerElem.classList.remove('container');
+        routeContainerElem.classList.remove('no-padding-top');
+        routeContainerElem.classList.add('container-fluid');
+        document.getElementsByClassName('hide-in-screenshot')[0].classList.add('hide');
+      }
     }
   }
 ];
