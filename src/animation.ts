@@ -62,16 +62,35 @@ export function getValueAtTime(
   return valueAndPrevKeyframe[0];
 }
 
-export function animate(
-  keyframes: IKeyframe[],
-  loop: boolean,
-  updateControlledValue: (newValue: number) => void
-) {
-  if (keyframes.length === 0) {
-    return;
+export interface IKeyframeAnimationCurve {
+  keyframes: IKeyframe[];
+  updateControlledValue: (newValue: number) => void;
+}
+
+export interface IKeyframeAnimation {
+  curves: IKeyframeAnimationCurve[];
+  loop: boolean;
+}
+
+export function getKeyframeAnimationDuration(animation: IKeyframeAnimation) {
+  // be sure to account for empty curves and curves with no keyframes
+  if (animation.curves.length === 0) {
+    return 0;
   }
 
-  const animationDurationSec = keyframes[keyframes.length - 1].time;
+  let duration = animation.curves
+    .map(curve => (curve.keyframes.length === 0)
+      ? 0
+      : curve.keyframes[curve.keyframes.length - 1].time)
+    .reduce((a, b) => Math.max(a, b));
+  
+  return duration;
+}
+
+export function runAnimation(
+  animation: IKeyframeAnimation
+) {
+  const animationDurationSec = getKeyframeAnimationDuration(animation);
 
   let startTimestampMs: number | undefined = undefined;
 
@@ -83,27 +102,59 @@ export function animate(
     const elapsedMs = timestampMs - startTimestampMs;
 
     let elapsedSec = elapsedMs / 1000;
-    if (loop) {
+    if (animation.loop) {
       elapsedSec = elapsedSec % animationDurationSec;
     } else if (elapsedSec >= animationDurationSec) {
       return;
     }
     
-    // use getValueAndPrevKeyframeAtTime() to get the value and the previous keyframe at the current time
-    const valueAndPrevKeyframe = getValueAndPrevKeyframeAtTime(keyframes, elapsedSec);
-    if (valueAndPrevKeyframe === undefined) {
-      requestAnimationFrame(animateHelper);
-      return;
-    }
-
-    const [newValue, prevKeyframe] = valueAndPrevKeyframe;
-    
-    if (newValue !== undefined) {
-      updateControlledValue(newValue);
+    for (const curve of animation.curves) {
+      const valueAndPrevKeyframe = getValueAndPrevKeyframeAtTime(curve.keyframes, elapsedSec);
+      if (valueAndPrevKeyframe === undefined) {
+        requestAnimationFrame(animateHelper);
+        return;
+      }
+  
+      const [newValue, prevKeyframe] = valueAndPrevKeyframe;
+      
+      if (newValue !== undefined) {
+        curve.updateControlledValue(newValue);
+      }
     }
 
     requestAnimationFrame(animateHelper);
   }
   
   requestAnimationFrame(animateHelper);
+}
+
+export class KeyframeBuilder {
+  private keyframes: IKeyframe[] = [];
+  private totalDuration: number = 0;
+
+  stepToValue(value: number, duration: number) {
+    this.lerpToValue(value, duration);
+  }
+
+  lerpToValue(value: number, duration: number) {
+    const startTime = (this.keyframes.length === 0)
+      ? 0
+      : this.keyframes[this.keyframes.length - 1].time;
+    const endTime = startTime + duration;
+
+    this.keyframes.push({ time: endTime, value });
+    this.totalDuration = endTime;
+  }
+
+  wait(duration: number) {
+    this.totalDuration += duration;
+
+    if (this.keyframes.length > 0) {
+      this.keyframes.push({ time: this.totalDuration, value: this.keyframes[this.keyframes.length - 1].value });
+    }
+  }
+
+  build() {
+    return this.keyframes;
+  }
 }

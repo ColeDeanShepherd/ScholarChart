@@ -7,7 +7,8 @@ import feather from 'feather-icons';
 import logo from './logo.svg';
 import { isDevEnv } from './config';
 import { initAnalytics, trackPageView } from './analytics';
-import { animate, IKeyframe } from './animation';
+import { runAnimation, IKeyframe, KeyframeBuilder, IKeyframeAnimation } from './animation';
+import { getElementYRelativeToContainer } from './ui-lib';
 
 // make it shareable
 // publish to social media
@@ -173,7 +174,7 @@ if (isDevEnv()) {
 
       const txn1Container = document.createElement('article');
       txn1Container.innerHTML = `
-        <header>Transaction 1</header>
+        <header>Transaction 1 (READ UNCOMMITTED)</header>
         <p>...</p>
         <p>SELECT Value FROM Table WHERE Id = 2</p>
         <p>...</p>
@@ -191,14 +192,13 @@ if (isDevEnv()) {
       gridDiv.appendChild(txn2Container);
 
       const overlayDiv = document.createElement('div');
-      overlayDiv.innerHTML = `asdf`;
       overlayDiv.style.position = 'absolute';
       overlayDiv.style.top = '0';
       overlayDiv.style.left = '0';
       overlayDiv.style.width = '100%';
-      // set height equal to height of paragraph in one of the transactions
-      //overlayDiv.style.height = '100px';
-      overlayDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      overlayDiv.style.border = '1px solid white';
+      overlayDiv.style.borderRadius = '8px';
+      overlayDiv.style.padding = '0.5rem';
 
       gridDiv.appendChild(overlayDiv);
 
@@ -224,7 +224,9 @@ if (isDevEnv()) {
             </tr>
             <tr>
               <td>2</td>
-              <td>200</td>
+              <td>
+                <span id="value">200</span>
+              </td>
             </tr>
             <tr>
               <td>3</td>
@@ -234,23 +236,47 @@ if (isDevEnv()) {
       routeContainerElem.appendChild(tableContainer);
 
       // Change the text's margin-left from 100px to 200px over 2 seconds. Use requestAnimationFrame, and the timestamp passed into it. Make it framerate-independent.
-      const keyframes: IKeyframe[] = [
-        {
-          time: 0.0,
-          value: txn1Container.getElementsByTagName('p')[0].getBoundingClientRect().top
-        },
-        {
-          time: 2.0,
-          value: txn1Container.getElementsByTagName('p')[1].getBoundingClientRect().top
-        }
-      ];
+      const ps = txn1Container.getElementsByTagName('p');
+      const posKeyframeBuilder = new KeyframeBuilder();
+      posKeyframeBuilder.stepToValue(getElementYRelativeToContainer(ps[0], gridDiv), 0);
+      posKeyframeBuilder.wait(1);
+      posKeyframeBuilder.lerpToValue(getElementYRelativeToContainer(ps[1], gridDiv), 1);
+      posKeyframeBuilder.wait(1);
+      posKeyframeBuilder.lerpToValue(getElementYRelativeToContainer(ps[2], gridDiv), 1);
+      posKeyframeBuilder.wait(1);
+      posKeyframeBuilder.lerpToValue(getElementYRelativeToContainer(ps[3], gridDiv), 1);
+      posKeyframeBuilder.wait(1);
 
-      const updateControlledValue: (newValue: number) => void =
-        newValue => {
-          overlayDiv.style.top = `${newValue}px`;
-        };
+      const valueSpan = tableContainer.querySelector<HTMLSpanElement>('#value')!;
+
+      const valueKeyframeBuilder = new KeyframeBuilder();
+      valueKeyframeBuilder.stepToValue(200, 0);
+      valueKeyframeBuilder.wait(0.5);
+      valueKeyframeBuilder.stepToValue(250, 0);
+      valueKeyframeBuilder.wait(4);
+      valueKeyframeBuilder.stepToValue(200, 0);
+
+      const animation: IKeyframeAnimation = {
+        curves: [
+          {
+            keyframes: posKeyframeBuilder.build(),
+            updateControlledValue: newValue => {
+              overlayDiv.style.top = `${newValue}px`;
+            }
+          },
+          {
+            keyframes: valueKeyframeBuilder.build(),
+            updateControlledValue: newValue => {
+              valueSpan.innerText = (newValue !== 250)
+                ? newValue.toString()
+                : '250 (uncommitted)';
+            }
+          }
+        ],
+        loop: true
+      };
       
-      animate(keyframes, true, updateControlledValue);
+      runAnimation(animation);
     }
   });
 }
