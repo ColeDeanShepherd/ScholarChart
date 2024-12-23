@@ -7,6 +7,5 @@ Learn with interactive, animated visualizations!
 * improvements to page
 * speech to text
 * localization
-* contact us
 * commenting
 * newsletter
