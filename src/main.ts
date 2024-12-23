@@ -74,7 +74,7 @@ const routes: IRoute[] = [
                 <td>🔥🔥🔥🔥</td>
                 <td class="left-align">
                   <ul>
-                    <li>Example Use: Generating approximate reports in real-time dashboards.</li>
+                    <li><u>Example Use</u>: Generating approximate reports in real-time dashboards.</li>
                   </ul>
                 </td>
               </tr>
@@ -87,18 +87,18 @@ const routes: IRoute[] = [
                 <td class="left-align">
                   <ul>
                     <li>
-                      READ_COMMITTED_SNAPSHOT = ON
+                      With READ_COMMITTED_SNAPSHOT on:
                       <ul>
-                        <li>Example Use: Typical OLTP workloads.</li>
+                        <li><u>Example Use</u>: Typical OLTP workloads.</li>
                         <li>The default isolation level in Azure SQL.</li>
                         <li>Uses row versioning to prevent dirty reads without blocking.</li>
                         <li>Increases I/O &amp; TempDB usage.</li>
                       </ul>
                     </li>
                     <li>
-                      READ_COMMITTED_SNAPSHOT = OFF
+                      With READ_COMMITTED_SNAPSHOT off:
                       <ul>
-                        <li>Example Use: OLTP workloads where increased blocking is OK.</li>
+                        <li><u>Example Use</u>: OLTP workloads where increased blocking is OK.</li>
                         <li>The default isolation level in SQL Server.</li>
                         <li>Uses locks to prevent dirty reads.</li>
                       </ul>
@@ -114,7 +114,7 @@ const routes: IRoute[] = [
                 <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
                 <td class="left-align">
                   <ul>
-                    <li>Example Use: Financial applications calculating intermediate results based on multiple reads.</li>
+                    <li><u>Example Use</u>: Financial applications calculating intermediate results based on multiple reads.</li>
                   </ul>
                 </td>
               </tr>
@@ -127,7 +127,7 @@ const routes: IRoute[] = [
                 <td class="left-align">
                   <ul>
                     <li>
-                      Example Uses:
+                      <u>Example Uses</u>:
                       <ul>
                         <li>Reporting and analytics workloads requiring a consistent snapshot of data.</li>
                         <li>Ensuring application sees stable/coherent snapshots when querying change-tracked data.</li>
@@ -146,7 +146,7 @@ const routes: IRoute[] = [
                 <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
                 <td class="left-align">
                   <ul>
-                    <li>Example Use: Financial applications where transactions involve critical integrity constraints.</li>
+                    <li><u>Example Use</u>: Financial applications where transactions involve critical integrity constraints.</li>
                     <li>Behaves like only one transaction can access data at a time.</li>
                   </ul>
                 </td>
