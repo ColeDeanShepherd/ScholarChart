@@ -5,6 +5,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import feather from 'feather-icons';
 
 import logo from './logo.svg';
+import { isDevEnv } from './config';
+import { initAnalytics, trackPageView } from './analytics';
 
 // think about all the ways to display this table-like data
 // start making it look nice
@@ -182,17 +184,25 @@ function getCurRoute() {
   return routes.find(r => r.pathname === route) ?? notFoundRoute;
 }
 
-function renderRoute(route: IRoute) {
+function activateRoute(route: IRoute) {
   const routeContainer = document.querySelector<HTMLDivElement>('#route-container')!;
   document.title = (route.title !== undefined)
     ? `${route.title} - ScholarChart`
     : 'ScholarChart';
+
+  // Send page view to Google Analytics now that the page title is set.
+  if (!isDevEnv()) {
+    initAnalytics();
+
+    trackPageView();
+  }
+
   route.renderFn(routeContainer);
 }
 
 function run() {
   const curRoute = getCurRoute();
-  renderRoute(curRoute);
+  activateRoute(curRoute);
 
   document.addEventListener('DOMContentLoaded', () => {
     feather.replace();
