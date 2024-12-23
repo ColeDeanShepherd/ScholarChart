@@ -8,16 +8,9 @@ import logo from './logo.svg';
 import { isDevEnv } from './config';
 import { initAnalytics, trackPageView } from './analytics';
 
-// think about all the ways to display this table-like data
-// start making it look nice
-// make it linkable
 // make it shareable
 // publish to social media
-
 // TODO: write skew?
-// TODO: read committed snapshot?
-// phantom read in snapshot?
-// read committed snapshot
 
 interface IRoute {
   pathname: string;
