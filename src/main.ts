@@ -10,6 +10,8 @@ import { IRoute } from './router';
 import { sqlServerTransactionIsolationLevelsRoute } from './ui/pages/sql-server-transaction-isolation-levels';
 import { devTestRoute } from './ui/pages/dev-test';
 import { homeRoute } from './ui/pages/home';
+import { runOpenAITest } from './llm';
+import { llmTestRoute } from './ui/pages/llm-test';
 
 const routes: IRoute[] = [
   homeRoute,
@@ -18,6 +20,7 @@ const routes: IRoute[] = [
 
 if (isDevEnv()) {
   routes.push(devTestRoute);
+  routes.push(llmTestRoute);
 }
 
 const notFoundRoute: IRoute = {
@@ -52,7 +55,7 @@ function activateRoute(route: IRoute) {
   route.renderFn(routeContainer);
 }
 
-function run() {
+async function run() {
   const curRoute = getCurRoute();
   activateRoute(curRoute);
 
@@ -61,4 +64,4 @@ function run() {
   });
 }
 
-run();
+await run();
