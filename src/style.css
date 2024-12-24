@@ -130,3 +130,22 @@ table td {
   /* padding: calc(var(--pico-spacing) / 2) calc(var(--pico-spacing) / 2); */
   padding: calc(var(--pico-spacing) / 2) 0;
 }
+
+.v-rating {
+  display: inline-block;
+}
+
+.v-rating-bar {
+  width: 24px;
+  height: 5px;
+  margin-bottom: 5px;
+  background-color: var(--pico-color);
+}
+
+.v-rating-bar.inactive {
+  opacity: 0.25;
+}
+
+.no-word-break {
+  white-space: nowrap;
+}

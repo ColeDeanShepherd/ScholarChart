@@ -9,7 +9,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
     routeContainerElem.innerHTML = `
       <div class="sql-server-transaction-isolation-levels">
         <h1>Azure SQL/SQL Server Transaction Isolation Levels</h1>
-        <p>Control how one transaction is affected by others executing concurrently, balancing concurrency/performance and data consistency.</p>
+        <p>Control how one transaction is affected by others executing concurrently, balancing concurrency and data consistency.</p>
 
         <article>
           <h3><u>Read Phenomena</u>: Artifacts in read data due to isolation level</h3>
@@ -20,14 +20,14 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
           </ul>
         </article>
 
-        <table>
+        <table class="striped">
           <thead>
             <tr>
               <th>Isolation Level</th>
               <th>Prevents Dirty Reads?</th>
               <th>Prevents Non-Repeatable Reads?</th>
               <th>Prevents Phantom Reads?</th>
-              <th>Concurrency &amp; Performance</th>
+              <th>Degree of Concurrency</th>
               <th>Use-Cases &amp; Remarks</th>
           </thead>
 
@@ -37,7 +37,15 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>🔥🔥🔥🔥</td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
               <td class="left-align">
                 <ul>
                   <li><u>Example Use</u>: Generating approximate reports in real-time dashboards.</li>
@@ -45,30 +53,46 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               </td>
             </tr>
             <tr>
-              <td>READ COMMITTED</td>
+              <td>READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT on)</span></small></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
               <td class="left-align">
                 <ul>
-                  <li>
-                    With READ_COMMITTED_SNAPSHOT on:
-                    <ul>
-                      <li><u>Example Use</u>: Typical OLTP workloads.</li>
-                      <li>The default isolation level in Azure SQL.</li>
-                      <li>Uses row versioning to prevent dirty reads without blocking.</li>
-                      <li>Increases I/O &amp; TempDB usage.</li>
-                    </ul>
-                  </li>
-                  <li>
-                    With READ_COMMITTED_SNAPSHOT off:
-                    <ul>
-                      <li><u>Example Use</u>: OLTP workloads where increased blocking is OK.</li>
-                      <li>The default isolation level in SQL Server.</li>
-                      <li>Uses locks to prevent dirty reads.</li>
-                    </ul>
-                  </li>
+                  <li><u>Example Use</u>: Typical OLTP workloads.</li>
+                  <li>The default isolation level in Azure SQL.</li>
+                  <li>Uses row versioning to prevent dirty reads without blocking.</li>
+                  <li>Increases I/O &amp; TempDB usage.</li>
+                </ul>
+              </td>
+            </tr><tr>
+              <td>READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT off)</span></small></td>
+              <td><span class="good-color"><i data-feather="check"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
+              <td><span class="bad-color"><i data-feather="x"></i></span></td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
+              <td class="left-align">
+                <ul>
+                  <li><u>Example Use</u>: OLTP workloads where increased I/O &amp; TempDB usage is a problem.</li>
+                  <li>The default isolation level in SQL Server.</li>
+                  <li>Uses locks to prevent dirty reads.</li>
                 </ul>
               </td>
             </tr>
@@ -77,7 +101,15 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>🔥🔥<span class="inactive-emoji">🔥🔥</span></td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
               <td class="left-align">
                 <ul>
                   <li><u>Example Use</u>: Financial applications calculating intermediate results based on multiple reads.</li>
@@ -89,7 +121,15 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td>🔥🔥🔥<span class="inactive-emoji">🔥</span></td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
               <td class="left-align">
                 <ul>
                   <li>
@@ -109,7 +149,15 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
               <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td>🔥<span class="inactive-emoji">🔥🔥🔥</span></td>
+              <td>
+                <div class="v-rating">
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar inactive"></div>
+                  <div class="v-rating-bar"></div>
+                </div>
+              </td>
               <td class="left-align">
                 <ul>
                   <li><u>Example Use</u>: Financial applications where transactions involve critical integrity constraints.</li>
@@ -122,7 +170,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div>
-          <div>v1 (Dec. 23, 2024)</div>
+          <div>v2 (Dec. 24, 2024)</div>
         </div>
         
         <p class="sources hide-in-screenshot" style="margin-top: 2rem;">Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
