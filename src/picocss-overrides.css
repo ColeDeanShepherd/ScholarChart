@@ -1,0 +1,58 @@
+:root {
+  --pico-line-height: 1.25;
+  /* Original: 1.5 */
+
+  --pico-form-element-spacing-vertical: 0.5rem;
+  /* Original: 1rem */
+
+  --pico-form-element-spacing-horizontal: 1.0rem;
+  /* Original: 1.25rem */
+}
+
+@media (min-width: 576px) {
+  :root {
+    --pico-font-size: 100%;
+    /* Original: 106.25% */
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --pico-font-size: 100%;
+    /* Original: 112.5% */
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --pico-font-size: 100%;
+    /* Original: 118.75% */
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --pico-font-size: 100%;
+    /* Original: 125% */
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --pico-font-size: 100%;
+    /* Original: 131.25% */
+  }
+}
+
+article {
+  border: 1px solid var(--pico-muted-border-color);
+  /* Original doesn't have a border */
+
+  border-radius: calc(var(--pico-border-radius) * 2);
+  /* Original: var(--pico-border-radius) */
+}
+
+article > footer {
+  border-radius: calc(var(--pico-border-radius) * 2);
+  /* Original: var(--pico-border-radius) */
+}

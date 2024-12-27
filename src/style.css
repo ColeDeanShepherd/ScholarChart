@@ -9,6 +9,10 @@ h2 {
   --pico-typography-spacing-top: 2rem !important;
 }
 
+ul {
+  padding-inline-start: 1.5rem;
+}
+
 ul.lsp-inside li {
   list-style-position: inside;;
 }

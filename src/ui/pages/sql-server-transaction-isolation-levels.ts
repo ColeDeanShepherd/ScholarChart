@@ -8,6 +8,7 @@ interface ITransactionIsolationLevelInfo {
   preventsNonRepeatableReads: boolean;
   preventsPhantomReads: boolean;
   throughputRating: number;
+  additionalIoAndTempDbUsageRating: number;
   useCasesRemarksHtml: string;
 }
 
@@ -26,7 +27,8 @@ function infoToTr(info: ITransactionIsolationLevelInfo): string {
       <td>${boolToXOrCheckHtml(info.preventsDirtyReads)}</td>
       <td>${boolToXOrCheckHtml(info.preventsNonRepeatableReads)}</td>
       <td>${boolToXOrCheckHtml(info.preventsPhantomReads)}</td>
-      <td>${ratingToBarsHtml(info.throughputRating, 5)}</td>
+      <td>${ratingToBarsHtml(info.throughputRating, 4)}</td>
+      <td>${ratingToBarsHtml(info.additionalIoAndTempDbUsageRating, 2)}</td>
       <td class="left-align">${info.useCasesRemarksHtml}</td>
     </tr>`);
 }
@@ -41,7 +43,8 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsDirtyReads: false,
         preventsNonRepeatableReads: false,
         preventsPhantomReads: false,
-        throughputRating: 5,
+        throughputRating: 4,
+        additionalIoAndTempDbUsageRating: 0,
         useCasesRemarksHtml: `
           <ul>
             <li><u>Example Use</u>: Generating approximate reports in real-time dashboards.</li>
@@ -54,12 +57,12 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsNonRepeatableReads: false,
         preventsPhantomReads: false,
         throughputRating: 4,
+        additionalIoAndTempDbUsageRating: 1,
         useCasesRemarksHtml: `
           <ul>
             <li><u>Example Use</u>: Typical OLTP workloads.</li>
             <li>The default isolation level in Azure SQL.</li>
             <li>Uses row versioning to prevent dirty reads without blocking.</li>
-            <li>Increases I/O &amp; TempDB usage.</li>
           </ul>
         `
       },
@@ -69,6 +72,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsNonRepeatableReads: false,
         preventsPhantomReads: false,
         throughputRating: 3,
+        additionalIoAndTempDbUsageRating: 0,
         useCasesRemarksHtml: `
           <ul>
             <li><u>Example Use</u>: OLTP workloads where increased I/O &amp; TempDB usage is a problem.</li>
@@ -83,6 +87,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsNonRepeatableReads: true,
         preventsPhantomReads: false,
         throughputRating: 2,
+        additionalIoAndTempDbUsageRating: 0,
         useCasesRemarksHtml: `
           <ul>
             <li><u>Example Use</u>: Financial applications calculating intermediate results based on multiple reads.</li>
@@ -95,6 +100,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsNonRepeatableReads: true,
         preventsPhantomReads: true,
         throughputRating: 4,
+        additionalIoAndTempDbUsageRating: 2,
         useCasesRemarksHtml: `
           <ul>
             <li>
@@ -105,7 +111,6 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               </ul>
             </li>
             <li>Uses versioning to provide a consistent view of data from start of transaction without blocking.</li>
-            <li>Increases I/O &amp; TempDB usage.</li>
           </ul>
         `
       },
@@ -115,6 +120,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         preventsNonRepeatableReads: true,
         preventsPhantomReads: true,
         throughputRating: 1,
+        additionalIoAndTempDbUsageRating: 0,
         useCasesRemarksHtml: `
           <ul>
             <li><u>Example Use</u>: Financial applications where transactions involve critical integrity constraints.</li>
@@ -133,6 +139,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
             <th>Prevents Non-Repeatable Reads?</th>
             <th>Prevents Phantom Reads?</th>
             <th>Degree of Concurrency</th>
+            <th>Additional I/O &amp; TempDB Usage</th>
             <th>Use-Cases &amp; Remarks</th>
         </thead>
 
@@ -159,7 +166,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div>
-          <div>v2 (Dec. 24, 2024)</div>
+          <div>v3 (Dec. 27, 2024)</div>
         </div>
         
         <p class="sources hide-in-screenshot" style="margin-top: 2rem;">Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>

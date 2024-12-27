@@ -1,4 +1,5 @@
 import '@picocss/pico/css/pico.min.css';
+import './picocss-overrides.css';
 import './style.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
