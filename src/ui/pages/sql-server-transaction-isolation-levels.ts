@@ -2,10 +2,145 @@ import logo from '../../logo.svg';
 import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 
+interface ITransactionIsolationLevelInfo {
+  nameHtml: string;
+  preventsDirtyReads: boolean;
+  preventsNonRepeatableReads: boolean;
+  preventsPhantomReads: boolean;
+  throughputRating: number;
+  useCasesRemarksHtml: string;
+}
+
+function boolToXOrCheckHtml(val: boolean): string {
+  return `<span class="${val ? 'good-color' : 'bad-color'}"><i data-feather="${val ? 'check' : 'x'}"></i></span>`;
+}
+
+function ratingToBarsHtml(rating: number, maxRating: number): string {
+  return `<div class="v-rating">${Array.from({ length: maxRating }, (_, i) => `<div class="v-rating-bar ${((maxRating - i) <= rating) ? '' : 'inactive'}"></div>`).join('')}</div>`;
+}
+
+function infoToTr(info: ITransactionIsolationLevelInfo): string {
+  return (
+    `<tr>
+      <td>${info.nameHtml}</td>
+      <td>${boolToXOrCheckHtml(info.preventsDirtyReads)}</td>
+      <td>${boolToXOrCheckHtml(info.preventsNonRepeatableReads)}</td>
+      <td>${boolToXOrCheckHtml(info.preventsPhantomReads)}</td>
+      <td>${ratingToBarsHtml(info.throughputRating, 5)}</td>
+      <td class="left-align">${info.useCasesRemarksHtml}</td>
+    </tr>`);
+}
+
 export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
   pathname: '/sql-server-transaction-isolation-levels',
   title: 'SQL Server Transaction Isolation Levels',
   renderFn: routeContainerElem => {
+    const transactionIsolationLevels: ITransactionIsolationLevelInfo[] = [
+      {
+        nameHtml: 'READ UNCOMMITTED',
+        preventsDirtyReads: false,
+        preventsNonRepeatableReads: false,
+        preventsPhantomReads: false,
+        throughputRating: 5,
+        useCasesRemarksHtml: `
+          <ul>
+            <li><u>Example Use</u>: Generating approximate reports in real-time dashboards.</li>
+          </ul>
+        `
+      },
+      {
+        nameHtml: 'READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT on)</span></small>',
+        preventsDirtyReads: true,
+        preventsNonRepeatableReads: false,
+        preventsPhantomReads: false,
+        throughputRating: 4,
+        useCasesRemarksHtml: `
+          <ul>
+            <li><u>Example Use</u>: Typical OLTP workloads.</li>
+            <li>The default isolation level in Azure SQL.</li>
+            <li>Uses row versioning to prevent dirty reads without blocking.</li>
+            <li>Increases I/O &amp; TempDB usage.</li>
+          </ul>
+        `
+      },
+      {
+        nameHtml: 'READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT off)</span></small>',
+        preventsDirtyReads: true,
+        preventsNonRepeatableReads: false,
+        preventsPhantomReads: false,
+        throughputRating: 3,
+        useCasesRemarksHtml: `
+          <ul>
+            <li><u>Example Use</u>: OLTP workloads where increased I/O &amp; TempDB usage is a problem.</li>
+            <li>The default isolation level in SQL Server.</li>
+            <li>Uses locks to prevent dirty reads.</li>
+          </ul>
+        `
+      },
+      {
+        nameHtml: 'REPEATABLE READ',
+        preventsDirtyReads: true,
+        preventsNonRepeatableReads: true,
+        preventsPhantomReads: false,
+        throughputRating: 2,
+        useCasesRemarksHtml: `
+          <ul>
+            <li><u>Example Use</u>: Financial applications calculating intermediate results based on multiple reads.</li>
+          </ul>
+        `
+      },
+      {
+        nameHtml: 'SNAPSHOT',
+        preventsDirtyReads: true,
+        preventsNonRepeatableReads: true,
+        preventsPhantomReads: true,
+        throughputRating: 4,
+        useCasesRemarksHtml: `
+          <ul>
+            <li>
+              <u>Example Uses</u>:
+              <ul>
+                <li>Reporting and analytics workloads requiring a consistent snapshot of data.</li>
+                <li>Ensuring application sees stable/coherent snapshots when querying change-tracked data.</li>
+              </ul>
+            </li>
+            <li>Uses versioning to provide a consistent view of data from start of transaction without blocking.</li>
+            <li>Increases I/O &amp; TempDB usage.</li>
+          </ul>
+        `
+      },
+      {
+        nameHtml: 'SERIALIZABLE',
+        preventsDirtyReads: true,
+        preventsNonRepeatableReads: true,
+        preventsPhantomReads: true,
+        throughputRating: 1,
+        useCasesRemarksHtml: `
+          <ul>
+            <li><u>Example Use</u>: Financial applications where transactions involve critical integrity constraints.</li>
+            <li>Behaves like only one transaction can access data at a time.</li>
+          </ul>
+        `
+      }
+    ];
+
+    const tableHtml = `
+      <table class="striped">
+        <thead>
+          <tr>
+            <th>Isolation Level</th>
+            <th>Prevents Dirty Reads?</th>
+            <th>Prevents Non-Repeatable Reads?</th>
+            <th>Prevents Phantom Reads?</th>
+            <th>Degree of Concurrency</th>
+            <th>Use-Cases &amp; Remarks</th>
+        </thead>
+
+        <tbody>
+          ${transactionIsolationLevels.map(infoToTr).join('')}
+        </tbody>
+      </table>`;
+
     routeContainerElem.innerHTML = `
       <div class="sql-server-transaction-isolation-levels">
         <h1>Azure SQL/SQL Server Transaction Isolation Levels</h1>
@@ -20,153 +155,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
           </ul>
         </article>
 
-        <table class="striped">
-          <thead>
-            <tr>
-              <th>Isolation Level</th>
-              <th>Prevents Dirty Reads?</th>
-              <th>Prevents Non-Repeatable Reads?</th>
-              <th>Prevents Phantom Reads?</th>
-              <th>Degree of Concurrency</th>
-              <th>Use-Cases &amp; Remarks</th>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>READ UNCOMMITTED</td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li><u>Example Use</u>: Generating approximate reports in real-time dashboards.</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT on)</span></small></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li><u>Example Use</u>: Typical OLTP workloads.</li>
-                  <li>The default isolation level in Azure SQL.</li>
-                  <li>Uses row versioning to prevent dirty reads without blocking.</li>
-                  <li>Increases I/O &amp; TempDB usage.</li>
-                </ul>
-              </td>
-            </tr><tr>
-              <td>READ COMMITTED<br /><small><span class="no-word-break">(w/READ_COMMITTED_SNAPSHOT off)</span></small></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li><u>Example Use</u>: OLTP workloads where increased I/O &amp; TempDB usage is a problem.</li>
-                  <li>The default isolation level in SQL Server.</li>
-                  <li>Uses locks to prevent dirty reads.</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>REPEATABLE READ</td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="bad-color"><i data-feather="x"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li><u>Example Use</u>: Financial applications calculating intermediate results based on multiple reads.</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>SNAPSHOT</td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li>
-                    <u>Example Uses</u>:
-                    <ul>
-                      <li>Reporting and analytics workloads requiring a consistent snapshot of data.</li>
-                      <li>Ensuring application sees stable/coherent snapshots when querying change-tracked data.</li>
-                    </ul>
-                  </li>
-                  <li>Uses versioning to provide a consistent view of data from start of transaction without blocking.</li>
-                  <li>Increases I/O &amp; TempDB usage.</li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td>SERIALIZABLE</td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td><span class="good-color"><i data-feather="check"></i></span></td>
-              <td>
-                <div class="v-rating">
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar inactive"></div>
-                  <div class="v-rating-bar"></div>
-                </div>
-              </td>
-              <td class="left-align">
-                <ul>
-                  <li><u>Example Use</u>: Financial applications where transactions involve critical integrity constraints.</li>
-                  <li>Behaves like only one transaction can access data at a time.</li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        ${tableHtml}
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div class="logo-with-name"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div>
