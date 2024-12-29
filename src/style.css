@@ -11,27 +11,28 @@ h2 {
 
 ul {
   padding-inline-start: 1.5rem;
-}
 
-ul.lsp-inside li {
-  list-style-position: inside;;
-}
+  li {
+    list-style-type: disc;
+  }
 
-ul:last-child {
-  margin-bottom: 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.lsp-inside li {
+    list-style-position: inside;;
+  }
 }
 
 p:last-child {
   margin-bottom: 0;
 }
 
-ul li {
-  list-style-type: disc;
-}
-
-table th,
-table td {
-  text-align: center;
+table {
+  th,td {
+    text-align: center;
+  }
 }
 
 #route-container {
@@ -42,15 +43,15 @@ table td {
   align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
-}
 
-.logo-with-name img {
-  height: 2.5rem;
-  margin-right: 0.3rem;
-}
-
-.logo-with-name a:hover {
-  text-decoration: none;
+  img {
+    height: 2.5rem;
+    margin-right: 0.3rem;
+  }
+  
+  a:hover {
+    text-decoration: none;
+  }
 }
 
 .color-rating-1-of-5 {
@@ -101,14 +102,15 @@ table td {
 .social-links {
   margin: 0;
   padding: 0;
+  
+  li {
+    list-style-type: none;
+    display: inline;
+    padding-right: 0.5rem;
+  }
 }
 
-.social-links li {
-  list-style-type: none;
-  display: inline;
-  padding-right: 0.5rem;
-}
-
+/* Boostrap Icon */
 .bi {
   width: 1em;
   font-size: var(--pico-font-size);
@@ -126,30 +128,47 @@ table td {
   display: none;
 }
 
+.no-word-break {
+  white-space: nowrap;
+}
+
 .hide-in-screenshot {
 }
 
-.screenshot th,
-.screenshot td {
-  /* padding: calc(var(--pico-spacing) / 2) calc(var(--pico-spacing) / 2); */
-  padding: calc(var(--pico-spacing) / 2) 0;
+.screenshot {
+  th,td {
+    /* padding: calc(var(--pico-spacing) / 2) calc(var(--pico-spacing) / 2); */
+    padding: calc(var(--pico-spacing) / 2) 0;
+  }
 }
 
 .v-rating {
   display: inline-block;
-}
 
-.v-rating-bar {
-  width: 24px;
-  height: 5px;
-  margin-bottom: 5px;
-  background-color: var(--pico-color);
-}
+  .v-rating-bar {
+    width: 24px;
+    height: 5px;
+    margin-bottom: 5px;
+    background-color: var(--pico-color);
 
-.v-rating-bar.inactive {
-  opacity: 0.25;
-}
+    &.inactive {
+      opacity: 0.25;
+    }
+  }
+  
+  &.good .v-rating-bar {
+    background-color: #00ff00;
 
-.no-word-break {
-  white-space: nowrap;
+    &.inactive {
+      background-color: var(--pico-color);
+    }
+  }
+  
+  &.bad .v-rating-bar {
+    background-color: #ff0000;
+
+    &.inactive {
+      background-color: var(--pico-color);
+    }
+  }
 }

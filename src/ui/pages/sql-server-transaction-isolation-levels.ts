@@ -16,8 +16,9 @@ function boolToXOrCheckHtml(val: boolean): string {
   return `<span class="${val ? 'good-color' : 'bad-color'}"><i data-feather="${val ? 'check' : 'x'}"></i></span>`;
 }
 
-function ratingToBarsHtml(rating: number, maxRating: number): string {
-  return `<div class="v-rating">${Array.from({ length: maxRating }, (_, i) => `<div class="v-rating-bar ${((maxRating - i) <= rating) ? '' : 'inactive'}"></div>`).join('')}</div>`;
+function ratingToBarsHtml(rating: number, maxRating: number, classNames?: string): string {
+  const classes = classNames ? `v-rating ${classNames}` : 'v-rating';
+  return `<div class="${classes}">${Array.from({ length: maxRating }, (_, i) => `<div class="v-rating-bar ${((maxRating - i) <= rating) ? '' : 'inactive'}"></div>`).join('')}</div>`;
 }
 
 function infoToTr(info: ITransactionIsolationLevelInfo): string {
@@ -27,8 +28,8 @@ function infoToTr(info: ITransactionIsolationLevelInfo): string {
       <td>${boolToXOrCheckHtml(info.preventsDirtyReads)}</td>
       <td>${boolToXOrCheckHtml(info.preventsNonRepeatableReads)}</td>
       <td>${boolToXOrCheckHtml(info.preventsPhantomReads)}</td>
-      <td>${ratingToBarsHtml(info.throughputRating, 4)}</td>
-      <td>${ratingToBarsHtml(info.additionalIoAndTempDbUsageRating, 2)}</td>
+      <td>${ratingToBarsHtml(info.throughputRating, 4, 'good')}</td>
+      <td>${ratingToBarsHtml(info.additionalIoAndTempDbUsageRating, 2, 'bad')}</td>
       <td class="left-align">${info.useCasesRemarksHtml}</td>
     </tr>`);
 }
