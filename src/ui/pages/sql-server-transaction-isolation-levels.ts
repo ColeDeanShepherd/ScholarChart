@@ -2,7 +2,8 @@ import logo from '../../logo.svg';
 import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 import { isDevEnv } from '../../config';
-import { a, article, button, div, h2, h3, img, li, p, section, span, text, ul } from '../../framework/ui/ui-core';
+import { a, article, button, details, div, elemsFromRawHtml, h2, h3, img, li, p, section, span, summary, text, ul } from '../../framework/ui/ui-core';
+import { arrIndices } from '../../framework/array-util';
 
 interface ITransactionIsolationLevelInfo {
   nameHtml: string;
@@ -36,6 +37,16 @@ function infoToTr(info: ITransactionIsolationLevelInfo): string {
     </tr>`);
 }
 
+interface ITableData {
+  columnHeaderHtmls: string[];
+  rows: string[][];
+}
+
+function extractDataFromTable(table: HTMLTableElement): ITableData {
+  const columnHeaderHtmls = Array.from(table.querySelectorAll('thead th')).map(th => th.innerHTML);
+  const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.innerHTML));
+  return { columnHeaderHtmls, rows };
+}
 
 const transactionIsolationLevels: ITransactionIsolationLevelInfo[] = [
   {
@@ -162,6 +173,12 @@ function termsView(terms: ITerm[]): HTMLUListElement {
   );
 }
 
+interface IQuestion {
+  question: string;
+  answers: Set<string>;
+  correctAnswer: string;
+}
+
 export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
   pathname: '/sql-server-transaction-isolation-levels',
   title: 'SQL Server Transaction Isolation Levels',
@@ -177,6 +194,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
             <th>Degree of Concurrency</th>
             <th>Additional I/O &amp; TempDB Usage</th>
             <th>Use-Cases &amp; Remarks</th>
+          </tr>
         </thead>
 
         <tbody>
@@ -218,15 +236,48 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
     const container = document.getElementsByClassName('sql-server-transaction-isolation-levels')[0];
 
     if (isDevEnv()) {
+      const tableData = extractDataFromTable(container.getElementsByTagName('table')[0]);
+      const allValsInEachCol = tableData.columnHeaderHtmls
+        .map((_, colIndex) => new Set(tableData.rows.map(row => row[colIndex])));
+      
+      const questions = tableData.rows.flatMap(row => {
+        const isolationLevel = row[0];
+        
+        return arrIndices(row)
+          .filter(i => i > 0)
+          .map<IQuestion>(i => ({
+            question: `"${isolationLevel}": ${tableData.columnHeaderHtmls[i]}`,
+            answers: allValsInEachCol[i],
+            correctAnswer: row[i]
+          }));
+      });
+      
+      const question = questions[0];
+      
+      function questionView(question: IQuestion) {
+
+        const result = article([
+          h3(elemsFromRawHtml(question.question)),
+          details({ class: 'dropdown' }, [
+            summary([ text('Select an answer') ]),
+            ul(
+              Array.from(question.answers).map(answer => li(elemsFromRawHtml(answer)))
+            )
+          ])
+        ]);
+
+        return result;
+      }
+
+      let questionContainer: HTMLElement;
+
       const quizSection = section({ class: 'hide-in-screenshot' }, [
         h2([ text('Test your knowledge:') ]),
-        article([
-          h3([ text('Does "READ UNCOMMITTED" prevent dirty reads?') ]),
-          button({ onClick: () => alert('Incorrect') }, [ text('Yes') ]),
-          button({ onClick: () => alert('Correct') }, [ text('No') ])
-        ])
+        (questionContainer = article())
       ]);
       container.appendChild(quizSection);
+
+      questionContainer.outerHTML = questionView(question).outerHTML;
     }
 
     container.appendChild(

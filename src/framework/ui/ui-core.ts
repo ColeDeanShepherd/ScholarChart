@@ -47,6 +47,13 @@ export const text = (_text: MaybeLocalizedString, disableTranslation = false) =>
   document.createTextNode(
     (disableTranslation && typeof _text === 'string') ? _text : translate(_text)
   );
+
+export const elemsFromRawHtml = (html: string): Node[] => {
+  const template = document.createElement('template');
+  template.innerHTML = html.trim();
+  return Array.from(template.content.childNodes);
+}
+
 export const h1 = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('h1', propsOrChildren, children);
 export const h2 = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('h2', propsOrChildren, children);
 export const h3 = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('h3', propsOrChildren, children);
@@ -63,6 +70,9 @@ export const header = (propsOrChildren?: NodeProps | Node[], children?: Node[]) 
 export const footer = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('footer', propsOrChildren, children);
 export const article = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('article', propsOrChildren, children);
 export const section = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('section', propsOrChildren, children);
+export const nav = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('nav', propsOrChildren, children);
+export const details = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('details', propsOrChildren, children);
+export const summary = (propsOrChildren?: NodeProps | Node[], children?: Node[]) => elem('summary', propsOrChildren, children);
 
 interface ANodeProps extends NodeProps {
   href?: string;
