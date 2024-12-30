@@ -132,7 +132,18 @@ table {
   white-space: nowrap;
 }
 
-.hide-in-screenshot {
+.show-only-in-screenshot {
+  display: none;
+}
+
+.screenshot {
+  .hide-in-screenshot {
+    display: none;
+  }
+  
+  .show-only-in-screenshot {
+    display: initial;
+  }
 }
 
 .screenshot {
