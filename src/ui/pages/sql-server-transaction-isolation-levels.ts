@@ -2,7 +2,7 @@ import logo from '../../logo.svg';
 import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 import { isDevEnv } from '../../config';
-import { a, article, button, div, h2, h3, img, p, section, text } from '../../framework/ui/ui-core';
+import { a, article, button, div, h2, h3, img, li, p, section, span, text, ul } from '../../framework/ui/ui-core';
 
 interface ITransactionIsolationLevelInfo {
   nameHtml: string;
@@ -130,6 +130,38 @@ const transactionIsolationLevels: ITransactionIsolationLevelInfo[] = [
   }
 ];
 
+interface ITerm {
+  term: string;
+  definition: string;
+}
+
+const readPheonomenaTerms = [
+  {
+    term: 'Dirty Read',
+    definition: 'Reading uncommitted changes from other transactions that could be rolled back later.'
+  },
+  {
+    term: 'Non-Repeatable Read',
+    definition: 'Getting different values when re-reading the same row due to updates by other transactions.'
+  },
+  {
+    term: 'Phantom Read',
+    definition: 'Seeing new or missing rows when re-reading a range due to inserts/deletes by other transactions.'
+  }
+];
+
+function termsView(terms: ITerm[]): HTMLUListElement {
+  return ul(
+    { class: 'terms' },
+    terms.map(term => li(
+      [
+        span({ class: 'bold underline' }, [ text(term.term) ]),
+        text(`: ${term.definition}`)
+      ]
+    ))
+  );
+}
+
 export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
   pathname: '/sql-server-transaction-isolation-levels',
   title: 'SQL Server Transaction Isolation Levels',
@@ -152,23 +184,20 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         </tbody>
       </table>`;
 
+    const _termsView = termsView(readPheonomenaTerms);
+    const termsHtml = _termsView.outerHTML;
+
     routeContainerElem.innerHTML = `
       <div class="sql-server-transaction-isolation-levels">
         <h1>Azure SQL/SQL Server Transaction Isolation Levels</h1>
         <p>Control how one transaction is affected by others executing concurrently, balancing concurrency and data consistency.</p>
 
         <article>
-          <h3><u>Read Phenomena</u>: Artifacts in read data due to isolation level</h3>
-          <ul>
-            <li><span class="bold underline">Dirty Read</span>: Reading uncommitted changes from other transactions that could be rolled back later.</li>
-            <li><span class="bold underline">Non-Repeatable Read</span>: Getting different values when re-reading the same row due to updates by other transactions.</li>
-            <li><span class="bold underline">Phantom Read</span>: Seeing new or missing rows when re-reading a range due to inserts/deletes by other transactions.</li>
-          </ul>
+          <h3>Artifacts in read data due to isolation level:</h3>
+          ${termsHtml}
         </article>
 
         ${tableHtml}
-
-        
       </div>
     `;
 
