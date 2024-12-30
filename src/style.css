@@ -165,6 +165,10 @@ table {
     &.inactive {
       opacity: 0.25;
     }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   
   &.good .v-rating-bar {

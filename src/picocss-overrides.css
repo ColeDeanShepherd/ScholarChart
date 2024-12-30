@@ -56,3 +56,10 @@ article > footer {
   border-radius: calc(var(--pico-border-radius) * 2);
   /* Original: var(--pico-border-radius) */
 }
+
+details.dropdown summary:not([role]) {
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

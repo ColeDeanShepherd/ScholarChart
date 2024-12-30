@@ -3,7 +3,7 @@ import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 import { isDevEnv } from '../../config';
 import { a, article, button, details, div, elemsFromRawHtml, h2, h3, img, li, p, section, span, summary, text, ul } from '../../framework/ui/ui-core';
-import { arrIndices } from '../../framework/array-util';
+import { arrIndices, arrRandElem } from '../../framework/array-util';
 
 interface ITransactionIsolationLevelInfo {
   nameHtml: string;
@@ -246,20 +246,64 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         return arrIndices(row)
           .filter(i => i > 0)
           .map<IQuestion>(i => ({
-            question: `"${isolationLevel}": ${tableData.columnHeaderHtmls[i]}`,
+            question: `<u>${isolationLevel}</u><br /><br />${tableData.columnHeaderHtmls[i]}:`,
             answers: allValsInEachCol[i],
             correctAnswer: row[i]
           }));
       });
+
+      // TODO: show correct or incorrect, normal text (not "a" text), questions about terms at top, test on phone, scramble answers
       
-      const question = questions[0];
-      
+      function nextQuestion() {
+        const question = arrRandElem(questions);
+        questionContainer.replaceChildren(questionView(question));
+      }
+
+      function createAnswerEffect(button: HTMLElement, isCorrect: boolean) {
+        //👍👎
+        // get position of button
+        // create an element at that position (fixed, centered) with the right emoji
+        // make the emoji drift up and fade out, then remove it
+
+        const btnRect = button.getBoundingClientRect();
+        const top = btnRect.top + (btnRect.height / 2);
+        const left = btnRect.left + (btnRect.width / 2);
+        
+        const emoji = document.createElement('div');
+        emoji.style.position = 'fixed';
+        emoji.style.top = `${top}px`;
+        emoji.style.left = `${left}px`;
+        emoji.style.opacity = '1';
+        emoji.style.transition = 'top 1s linear, opacity 1s ease-in';
+        emoji.style.fontSize = '1.25rem';
+        emoji.style.zIndex = '1000';
+        emoji.style.userSelect = 'none';
+        emoji.style.visibility = 'hidden';
+        emoji.innerHTML = isCorrect ? 'Correct 😄' : 'Incorrect 😞';
+        
+        document.body.appendChild(emoji);
+
+        setTimeout(() => {
+          const width = emoji.offsetWidth;
+          emoji.style.left = `${left - (width / 2)}px`;
+
+          emoji.style.top = `${top - 100}px`;
+          emoji.style.opacity = '0';
+          emoji.style.visibility = 'visible';
+        }, 0);
+
+        setTimeout(() => {
+          document.body.removeChild(emoji);
+        }, 1000);
+      }
+
       function questionView(question: IQuestion) {
         let detailsElem: HTMLElement;
         let summaryElem: HTMLElement;
+        let selectedAnswer: string;
 
         const result = article([
-          h3(elemsFromRawHtml(question.question)),
+          div({ style: "margin-bottom: var(--pico-spacing);" }, elemsFromRawHtml(question.question)),
           detailsElem = details({ class: 'dropdown' }, [
             (summaryElem = summary([ text('Select an answer') ])),
             ul(
@@ -272,6 +316,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
                     onClick: e => {
                       e.preventDefault();
                       e.stopPropagation();
+                      selectedAnswer = answer;
                       summaryElem.innerHTML = aElem.innerHTML;
                       detailsElem.removeAttribute('open');
                     }
@@ -281,7 +326,20 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
               })
             )
           ]),
-          button({ class: 'primary' }, [ text('Submit') ])
+          button(
+            {
+              onClick: e => {
+                const isCorrect = selectedAnswer === question.correctAnswer;
+                createAnswerEffect(e.target as HTMLElement, isCorrect);
+
+                if (isCorrect) {
+                  nextQuestion();
+                }
+              },
+              class: 'primary'
+            },
+            [ text('Submit') ]
+          )
         ]);
 
         return result;
@@ -294,8 +352,8 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
         (questionContainer = div())
       ]);
       container.appendChild(quizSection);
-
-      questionContainer.replaceChildren(questionView(question));
+      
+      nextQuestion();
     }
 
     container.appendChild(

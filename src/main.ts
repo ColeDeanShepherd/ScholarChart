@@ -1,4 +1,4 @@
-import '@picocss/pico/css/pico.min.css';
+import './modified.pico.css';
 import './picocss-overrides.css';
 import './style.css';
 
