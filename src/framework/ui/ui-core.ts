@@ -4,7 +4,7 @@ interface NodeProps {
   id?: string;
   class?: string;
   style?: string;
-  onClick?: () => void;
+  onClick?: (e: Event) => void;
   type?: string;
 }
 

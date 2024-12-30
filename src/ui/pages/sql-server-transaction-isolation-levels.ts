@@ -255,15 +255,33 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
       const question = questions[0];
       
       function questionView(question: IQuestion) {
+        let detailsElem: HTMLElement;
+        let summaryElem: HTMLElement;
 
         const result = article([
           h3(elemsFromRawHtml(question.question)),
-          details({ class: 'dropdown' }, [
-            summary([ text('Select an answer') ]),
+          detailsElem = details({ class: 'dropdown' }, [
+            (summaryElem = summary([ text('Select an answer') ])),
             ul(
-              Array.from(question.answers).map(answer => li(elemsFromRawHtml(answer)))
+              Array.from(question.answers).map(answer => {
+                let aElem: HTMLAnchorElement;
+
+                return li([
+                  aElem = a({
+                    href: '#',
+                    onClick: e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      summaryElem.innerHTML = aElem.innerHTML;
+                      detailsElem.removeAttribute('open');
+                    }
+                  },
+                  elemsFromRawHtml(answer))
+                ]);
+              })
             )
-          ])
+          ]),
+          button({ class: 'primary' }, [ text('Submit') ])
         ]);
 
         return result;
@@ -273,11 +291,11 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
 
       const quizSection = section({ class: 'hide-in-screenshot' }, [
         h2([ text('Test your knowledge:') ]),
-        (questionContainer = article())
+        (questionContainer = div())
       ]);
       container.appendChild(quizSection);
 
-      questionContainer.outerHTML = questionView(question).outerHTML;
+      questionContainer.replaceChildren(questionView(question));
     }
 
     container.appendChild(
