@@ -3,7 +3,7 @@ import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 import { isDevEnv } from '../../config';
 import { a, article, button, details, div, elemsFromRawHtml, h2, h3, img, li, p, section, span, summary, text, ul } from '../../framework/ui/ui-core';
-import { arrIndices, arrRandElem } from '../../framework/array-util';
+import { arrIndices, arrRandElem, arrShuffle } from '../../framework/array-util';
 
 interface ITransactionIsolationLevelInfo {
   nameHtml: string;
@@ -16,7 +16,7 @@ interface ITransactionIsolationLevelInfo {
 }
 
 function boolToXOrCheckHtml(val: boolean): string {
-  return `<span class="${val ? 'good-color' : 'bad-color'}"><i data-feather="${val ? 'check' : 'x'}"></i></span>`;
+  return `<span class="${val ? 'good-color' : 'bad-color'}" style="font-size: calc(2 * var(--pico-font-size));"><i class="${val ? 'bi bi-check' : 'bi bi-x'}"></i></span>`;
 }
 
 function ratingToBarsHtml(rating: number, maxRating: number, classNames?: string): string {
@@ -235,24 +235,31 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
 
     const container = document.getElementsByClassName('sql-server-transaction-isolation-levels')[0];
 
-    if (isDevEnv()) {
+    // quiz
+    {
       const tableData = extractDataFromTable(container.getElementsByTagName('table')[0]);
       const allValsInEachCol = tableData.columnHeaderHtmls
         .map((_, colIndex) => new Set(tableData.rows.map(row => row[colIndex])));
       
-      const questions = tableData.rows.flatMap(row => {
-        const isolationLevel = row[0];
-        
-        return arrIndices(row)
-          .filter(i => i > 0)
-          .map<IQuestion>(i => ({
-            question: `<u>${isolationLevel}</u><br /><br />${tableData.columnHeaderHtmls[i]}:`,
-            answers: allValsInEachCol[i],
-            correctAnswer: row[i]
-          }));
-      });
-
-      // TODO: show correct or incorrect, normal text (not "a" text), questions about terms at top, test on phone, scramble answers
+      const questions = tableData.rows
+        .flatMap(row => {
+          const isolationLevel = row[0];
+          
+          return arrIndices(row)
+            .filter(i => i > 0)
+            .map<IQuestion>(i => ({
+              question: `<u>${isolationLevel}</u><br /><br />${tableData.columnHeaderHtmls[i]}:`,
+              answers: allValsInEachCol[i],
+              correctAnswer: row[i]
+            }));
+        })
+        .concat(readPheonomenaTerms
+          .map<IQuestion>(term => ({
+            question: `<u>${term.term}</u>:`,
+            answers: new Set(readPheonomenaTerms.map(t => t.definition)),
+            correctAnswer: term.definition
+          }))
+        );
       
       function nextQuestion() {
         const question = arrRandElem(questions);
@@ -260,11 +267,6 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
       }
 
       function createAnswerEffect(button: HTMLElement, isCorrect: boolean) {
-        //👍👎
-        // get position of button
-        // create an element at that position (fixed, centered) with the right emoji
-        // make the emoji drift up and fade out, then remove it
-
         const btnRect = button.getBoundingClientRect();
         const top = btnRect.top + (btnRect.height / 2);
         const left = btnRect.left + (btnRect.width / 2);
@@ -348,7 +350,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
       let questionContainer: HTMLElement;
 
       const quizSection = section({ class: 'hide-in-screenshot' }, [
-        h2([ text('Test your knowledge:') ]),
+        h2({ style: "margin-top: 1em;" }, [ text('Test your knowledge:') ]),
         (questionContainer = div())
       ]);
       container.appendChild(quizSection);

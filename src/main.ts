@@ -3,7 +3,6 @@ import './picocss-overrides.css';
 import './style.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import feather from 'feather-icons';
 
 import { isDevEnv } from './config';
 import { initAnalytics, trackPageView } from './analytics';
@@ -60,9 +59,8 @@ async function run() {
   const curRoute = getCurRoute();
   activateRoute(curRoute);
 
-  document.addEventListener('DOMContentLoaded', () => {
-    feather.replace();
-  });
+  // document.addEventListener('DOMContentLoaded', () => {
+  // });
 }
 
 run();

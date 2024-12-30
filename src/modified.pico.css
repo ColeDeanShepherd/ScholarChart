@@ -2088,19 +2088,19 @@ details.dropdown summary + ul[dir=rtl] {
   right: 0;
   left: auto;
 }
-details.dropdown summary + ul li {
+details.dropdown summary + ul > li {
   width: 100%;
   margin-bottom: 0;
   padding: calc(var(--pico-form-element-spacing-vertical) * 0.5) var(--pico-form-element-spacing-horizontal);
   list-style: none;
 }
-details.dropdown summary + ul li:first-of-type {
+details.dropdown summary + ul > li:first-of-type {
   margin-top: calc(var(--pico-form-element-spacing-vertical) * 0.5);
 }
-details.dropdown summary + ul li:last-of-type {
+details.dropdown summary + ul > li:last-of-type {
   margin-bottom: calc(var(--pico-form-element-spacing-vertical) * 0.5);
 }
-details.dropdown summary + ul li a {
+details.dropdown summary + ul > li a {
   display: block;
   margin: calc(var(--pico-form-element-spacing-vertical) * -0.5) calc(var(--pico-form-element-spacing-horizontal) * -1);
   padding: calc(var(--pico-form-element-spacing-vertical) * 0.5) var(--pico-form-element-spacing-horizontal);
@@ -2109,14 +2109,19 @@ details.dropdown summary + ul li a {
   color: var(--pico-dropdown-color);
   text-decoration: none;
   text-overflow: ellipsis;
+  --pico-color: inherit;
+
+  &:hover {
+    --pico-color: inherit;
+  }
 }
-details.dropdown summary + ul li a:hover, details.dropdown summary + ul li a:focus, details.dropdown summary + ul li a:active, details.dropdown summary + ul li a:focus-visible, details.dropdown summary + ul li a[aria-current]:not([aria-current=false]) {
+details.dropdown summary + ul > li a:hover, details.dropdown summary + ul > li a:focus, details.dropdown summary + ul > li a:active, details.dropdown summary + ul > li a:focus-visible, details.dropdown summary + ul > li a[aria-current]:not([aria-current=false]) {
   background-color: var(--pico-dropdown-hover-background-color);
 }
-details.dropdown summary + ul li label {
+details.dropdown summary + ul > li label {
   width: 100%;
 }
-details.dropdown summary + ul li:has(label):hover {
+details.dropdown summary + ul > li:has(label):hover {
   background-color: var(--pico-dropdown-hover-background-color);
 }
 
