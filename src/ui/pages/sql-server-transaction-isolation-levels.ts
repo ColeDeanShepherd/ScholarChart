@@ -2,7 +2,7 @@ import logo from '../../logo.svg';
 import { getCurQueryParams } from "../../web-lib";
 import { IRoute } from '../../router';
 import { isDevEnv } from '../../config';
-import { article, button, h2, h3, section, text } from '../../framework/ui/ui-core';
+import { a, article, button, div, h2, h3, img, p, section, text } from '../../framework/ui/ui-core';
 
 interface ITransactionIsolationLevelInfo {
   nameHtml: string;
@@ -168,12 +168,7 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
 
         ${tableHtml}
 
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div class="logo-with-name"><div class="show-only-in-screenshot"><img src="${logo}" alt="ScholarChart" /> ScholarChart.com</div></div>
-          <div>v4 (Dec. 29, 2024)</div>
-        </div>
         
-        <p class="sources hide-in-screenshot" style="margin-top: 2rem;">Source: <a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide" target="_blank">https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide</a></p>
       </div>
     `;
 
@@ -191,9 +186,9 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
       routeContainerElem.classList.add('container-fluid');
     }
 
+    const container = document.getElementsByClassName('sql-server-transaction-isolation-levels')[0];
+
     if (isDevEnv()) {
-      const container = document.getElementsByClassName('sql-server-transaction-isolation-levels')[0];
-      
       const quizSection = section({ class: 'hide-in-screenshot' }, [
         h2([ text('Test your knowledge:') ]),
         article([
@@ -204,5 +199,24 @@ export const sqlServerTransactionIsolationLevelsRoute: IRoute = {
       ]);
       container.appendChild(quizSection);
     }
+
+    container.appendChild(
+      p({ class: 'sources hide-in-screenshot', style: 'margin-top: 2rem;' }, [
+        text('Source: '),
+        a({ href: 'https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide', target: '_blank' }, [ text('https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide') ])
+      ])
+    );
+
+    container.appendChild(
+      div({ style: 'display: flex; justify-content: space-between; align-items: center;' }, [
+        div({ class: 'logo-with-name' }, [
+          div({ class: 'show-only-in-screenshot' }, [
+            img({ src: logo, alt: 'ScholarChart' }),
+            text(' ScholarChart.com')
+          ])
+        ]),
+        text('v4 (Dec. 29, 2024)')
+      ])
+    );
   }
 };
